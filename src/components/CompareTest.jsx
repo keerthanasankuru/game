@@ -1,0 +1,147 @@
+import React, { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import "./CompareTest.css";
+import Navbar from "./Navbar";
+
+const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+export default function CompareTest() {
+  const [questions, setQuestions] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedSymbol, setSelectedSymbol] = useState("");
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [testStarted, setTestStarted] = useState(false);
+  const [answers, setAnswers] = useState([]);
+  const [selectedTime, setSelectedTime] = useState(5); // default 5 min
+  const navigate = useNavigate();
+
+  const finishTest = useCallback(() => {
+    navigate("/result", { state: { answers } });
+  }, [navigate, answers]);
+
+  const startTest = () => {
+    const qns = Array.from({ length: 10 }, () => {
+      const a = rand(1, 9);
+      const b = rand(1, 9);
+      const correct = a > b ? ">" : a < b ? "<" : "=";
+      return { left: a, right: b, correct };
+    });
+    setQuestions(qns);
+    setTimeLeft(selectedTime * 60);
+    setTestStarted(true);
+  };
+
+  useEffect(() => {
+    if (!testStarted || timeLeft <= 0) {
+      if (testStarted && timeLeft <= 0) finishTest();
+      return;
+    }
+    const t = setTimeout(() => setTimeLeft((t) => t - 1), 1000);
+    return () => clearTimeout(t);
+  }, [timeLeft, testStarted, finishTest]);
+
+  const submitAnswer = () => {
+    if (!selectedSymbol) return;
+    const current = questions[currentIndex];
+    setAnswers((prev) => [
+      ...prev,
+      {
+        question: `${current.left} ? ${current.right}`,
+        selected: selectedSymbol,
+        correct: current.correct,
+        isCorrect: selectedSymbol === current.correct,
+      },
+    ]);
+    setSelectedSymbol("");
+    if (currentIndex === questions.length - 1) {
+      finishTest();
+    } else {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  // ------------------------------
+  // BEFORE TEST STARTS: Select Time
+  // ------------------------------
+  if (!testStarted) {
+    return (
+      <>
+        <Navbar />
+        <div className="test-container">
+          <h2 className="test-title">🧠 Select Test Duration</h2>
+          <select
+            value={selectedTime}
+            onChange={(e) => setSelectedTime(parseInt(e.target.value))}
+            style={{ fontSize: "18px", padding: "8px", borderRadius: "6px" }}
+          >
+            {[...Array(12)].map((_, i) => {
+              const min = (i + 1) * 5;
+              return (
+                <option key={min} value={min}>
+                  {min} minutes
+                </option>
+              );
+            })}
+          </select>
+          <br />
+          <button
+            onClick={startTest}
+            className="test-submit-btn"
+            style={{ marginTop: "20px" }}
+          >
+            ✅ Start Test
+          </button>
+        </div>
+      </>
+    );
+  }
+
+  // ------------------------------
+  // DURING TEST
+  // ------------------------------
+  if (questions.length === 0) return <p>Loading test...</p>;
+
+  const current = questions[currentIndex];
+
+  return (
+    <div className="test-container">
+      <Navbar />
+      <h2 className="test-title">🧪 Test Mode – Compare the Numbers</h2>
+      <div className="timer">⏰ Time Left: {timeLeft}s</div>
+
+      <div className="test-num-row">
+        <span className="test-big-num">{current.left}</span>
+        <span className="test-big-num">?</span>
+        <span className="test-big-num">{current.right}</span>
+      </div>
+
+      <div className="test-sym-row">
+        {["<", "=", ">"].map((sym) => (
+          <div
+            key={sym}
+            className={`test-sym-box ${selectedSymbol === sym ? "picked" : ""}`}
+            onClick={() => setSelectedSymbol(sym)}
+          >
+            {sym}
+          </div>
+        ))}
+      </div>
+
+      <button
+        onClick={submitAnswer}
+        disabled={!selectedSymbol}
+        className="test-submit-btn"
+      >
+        Submit
+      </button>
+
+      <button
+        onClick={finishTest}
+        className="test-submit-btn"
+        style={{ marginTop: "14px", backgroundColor: "#f44336" }}
+      >
+        ⛔ End Test
+      </button>
+    </div>
+  );
+}
