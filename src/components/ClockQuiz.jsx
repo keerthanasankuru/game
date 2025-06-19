@@ -46,7 +46,6 @@ export default function ClockQuiz() {
   const navigate = useNavigate();
   const [level] = useState(1);
   const [selectedMinutes, setSelectedMinutes] = useState(5);
-  const [duration, setDuration] = useState(null);
   const [started, setStarted] = useState(false);
 
   const [question, setQuestion] = useState(generateQuestion(1));
@@ -60,6 +59,7 @@ export default function ClockQuiz() {
   const timerRef = useRef(null);
   const minuteOptions = Array.from({ length: 59 }, (_, i) => i + 1);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (started && timeLeft > 0) {
       timerRef.current = setInterval(() => {
@@ -69,6 +69,7 @@ export default function ClockQuiz() {
     return () => clearInterval(timerRef.current);
   }, [started]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (timeLeft === 0 && started) {
       clearInterval(timerRef.current);
@@ -77,7 +78,6 @@ export default function ClockQuiz() {
 
   const startQuiz = () => {
     const seconds = selectedMinutes * 60;
-    setDuration(seconds);
     setTimeLeft(seconds);
     setStarted(true);
     setQuestion(generateQuestion(level));
@@ -111,7 +111,6 @@ export default function ClockQuiz() {
   const resetQuiz = () => {
     clearInterval(timerRef.current);
     setStarted(false);
-    setDuration(null);
     setTimeLeft(0);
     setTotal(0);
     setCorrect(0);
