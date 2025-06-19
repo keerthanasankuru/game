@@ -43,6 +43,12 @@ export default function AscendingTest() {
     return () => clearTimeout(t);
   }, [timeLeft, testStarted, finishTest]);
 
+  const formatTime = (seconds) => {
+    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const s = String(seconds % 60).padStart(2, '0');
+    return `${m}:${s}`;
+  };
+
   const handlePick = (n) => {
     setPicked(n);
   };
@@ -115,9 +121,8 @@ export default function AscendingTest() {
 
   return (
     <div className="test-container">
-      {/* Navbar hidden during test */}
       <h2 className="test-title">🔢 Arrange in Ascending Order</h2>
-      <div className="timer">⏰ Time Left: {timeLeft}s</div>
+      <div className="timer">⏰ Time Left: {formatTime(timeLeft)}</div>
 
       <div className="num-buttons">
         {nums.map((n, idx) => (
