@@ -19,7 +19,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="nav-title" onClick={() => navigate("/")}>
-        🧠 Compare Game
+        🧠  Game
       </div>
       <div className="nav-buttons">
         <button onClick={() => navigate("/")}>Home</button>
