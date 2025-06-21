@@ -15,6 +15,7 @@ export default function AscendingTest() {
   const [testStarted, setTestStarted] = useState(false);
   const [answers, setAnswers] = useState([]);
   const [selectedTime, setSelectedTime] = useState(5);
+  const [questionStartTime, setQuestionStartTime] = useState(null);
 
   const finishTest = useCallback(() => {
     navigate("/ascending-result", { state: { answers } });
@@ -32,6 +33,7 @@ export default function AscendingTest() {
     setQuestions(qns);
     setTimeLeft(selectedTime * 60);
     setTestStarted(true);
+    setQuestionStartTime(Date.now());
   };
 
   useEffect(() => {
@@ -65,6 +67,8 @@ export default function AscendingTest() {
     const currentQ = questions[currentIndex];
     const sorted = [...currentQ].sort((a, b) => a - b);
     const correct = sorted.every((n, i) => selected[i] === n);
+    const timeTaken = questionStartTime ? Math.floor((Date.now() - questionStartTime) / 1000) : 1;
+
     setAnswers((prev) => [
       ...prev,
       {
@@ -72,12 +76,15 @@ export default function AscendingTest() {
         selected: selected.join(", "),
         correct: sorted.join(", "),
         isCorrect: correct,
+        time: timeTaken,
       },
     ]);
+
     if (currentIndex + 1 < questions.length) {
       setCurrentIndex((prev) => prev + 1);
       setSelected(["", "", ""]);
       setPicked(null);
+      setQuestionStartTime(Date.now());
     } else {
       finishTest();
     }
