@@ -24,12 +24,8 @@ export default function Result() {
       <div className="result-container">
         <h2 className="result-title">📊 Test Results</h2>
 
-        <div className="score-box">
-          ✅ Score: {correct} / {answers.length}
-        </div>
-        <div className="time-box">
-          🕒 Total Time Taken: {minutes}:{seconds}
-        </div>
+        <div className="score-box">✅ Score: {correct} / {answers.length}</div>
+        <div className="time-box">🕒 Total Time Taken: {minutes}:{seconds}</div>
 
         <div className="answers-list">
           {answers.map((a, idx) => {
@@ -55,12 +51,20 @@ export default function Result() {
 
                   {!a.isCorrect && isRetrying ? (
                     <>
-                      <div className="test-sym-row" style={{  marginBottom: "2px" }}>
-                        {['<', '=', '>'].map((sym) => (
+                      <div className="test-sym-row" style={{ marginBottom: "10px", display: "flex", gap: "12px" }}>
+                        {["<", "=", ">"].map((sym) => (
                           <div
                             key={sym}
                             className={`test-sym-box ${retryAnswer === sym ? "picked" : ""}`}
-                            style={{ fontSize: "2px", padding: "0.02px 0.06px" }}
+                            style={{
+                              fontSize: "24px",
+                              padding: "8px 16px",
+                              border: "2px solid #444",
+                              borderRadius: "8px",
+                              cursor: "pointer",
+                              width: "50px",
+                              textAlign: "center"
+                            }}
                             onClick={() => setRetryAnswer(sym)}
                           >
                             {sym}
