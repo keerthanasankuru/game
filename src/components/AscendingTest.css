@@ -237,3 +237,15 @@ body, html {
     align-items: center;
   }
 }
+.end-test-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: #f44336 !important;
+  width: 120px;
+  height: 40px;
+  font-size: 16px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  z-index: 1000;
+}
