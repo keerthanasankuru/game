@@ -55,7 +55,7 @@ export default function Result() {
 
                   {!a.isCorrect && isRetrying ? (
                     <>
-                      <div className="test-sym-row" style={{ marginBottom: "12px" }}>
+                      <div className="test-sym-row" style={{  marginBottom: "2px" }}>
                         {['<', '=', '>'].map((sym) => (
                           <div
                             key={sym}
