@@ -134,7 +134,9 @@ export default function CompareTest() {
 
       <div className="test-num-row">
         <span className="test-big-num">{current.left}</span>
-        <span className="test-sym-box empty-box">{selectedSymbol}</span>
+        <span className="test-sym-box empty-box">
+          {selectedSymbol || <span style={{ opacity: 0.4 }}>___</span>}
+        </span>
         <span className="test-big-num">{current.right}</span>
       </div>
 
