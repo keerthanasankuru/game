@@ -44,8 +44,8 @@ export default function AscendingTest() {
   }, [timeLeft, testStarted, finishTest]);
 
   const formatTime = (seconds) => {
-    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-    const s = String(seconds % 60).padStart(2, '0');
+    const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+    const s = String(seconds % 60).padStart(2, "0");
     return `${m}:${s}`;
   };
 
@@ -152,14 +152,14 @@ export default function AscendingTest() {
         onClick={submitAnswer}
         disabled={selected.includes("")}
         className="test-submit-btn"
+        style={{ marginTop: "20px" }}
       >
-        Submit
+        ➡️ Next
       </button>
 
       <button
         onClick={finishTest}
-        className="test-submit-btn"
-        style={{ marginTop: "14px", backgroundColor: "#f44336" }}
+        className="test-submit-btn end-test-btn"
       >
         ⛔ End Test
       </button>
